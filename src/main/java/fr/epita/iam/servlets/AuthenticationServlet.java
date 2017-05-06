@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
  *
  */
 
-@WebServlet(name="AuthenticationServlet", urlPatterns={"/authenticate"})
+@WebServlet(name="AuthenticationServlet", urlPatterns={"/","/authenticate"})
 public class AuthenticationServlet extends HttpServlet{
 
 	/**
@@ -37,4 +37,11 @@ public class AuthenticationServlet extends HttpServlet{
 		String password = req.getParameter("password");
 		LOGGER.info("tried to authenticate with this login {}", login);
 	}
+	
+	 @Override
+	  public void doGet(HttpServletRequest request, HttpServletResponse response)
+	               throws IOException, ServletException {
+	      // Set the response message's MIME type
+	      response.sendRedirect("index.html");
+	 }
 }

@@ -32,7 +32,8 @@ public class Identity {
 	@Column(name="IDENTITIES_EMAIL")
 	private String email;
 	
-	
+	@Column(name="PASSWORD")
+	private String password;
 	 /**
 	 * Default constructor
 	 */
@@ -53,6 +54,26 @@ public class Identity {
 	}
 	
 	
+	
+	public Identity(String uid, String displayName, String email, String password) {
+		super();
+		this.uid = uid;
+		this.displayName = displayName;
+		this.email = email;
+		this.password = password;
+	}
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
 	/**
 	 * @return the uid
 	 */
