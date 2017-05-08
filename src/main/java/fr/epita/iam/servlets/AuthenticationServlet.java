@@ -33,9 +33,9 @@ public class AuthenticationServlet extends HttpServlet{
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String login = req.getParameter("login");
+		String username = req.getParameter("usernmae");
 		String password = req.getParameter("password");
-		LOGGER.info("tried to authenticate with this login {}", login);
+		LOGGER.info("tried to authenticate with this login {}", username);
 	}
 	
 	 @Override
