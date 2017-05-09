@@ -15,21 +15,21 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="IDENTITIES")
+@Table(name="IAM2017.IDENTITIES")
 public class Identity {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="IDENTITIES_ID")
+	@Column(name="IDENTITY_ID")
 	private long id;
 	
 	@Column(name="IDENTITIES_UID")
 	private String uid;
 	
-	@Column(name="IDENTITIES_DISPLAYNAME")
+	@Column(name="DISPLAY_NAME")
 	private String displayName;
 	
-	@Column(name="IDENTITIES_EMAIL")
+	@Column(name="EMAIL")
 	private String email;
 	
 	@Column(name="PASSWORD")

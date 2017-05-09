@@ -1,2 +1,0 @@
--- drop schema Advanced_java_2017;
--- create schema Advanced_java_2017;
