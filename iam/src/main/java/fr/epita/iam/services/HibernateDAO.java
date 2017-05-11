@@ -83,4 +83,9 @@ public class HibernateDAO implements Dao<Identity>{
 		return identityList;
 	}
 
+	public List<Identity> search(Identity instance, String separator, String... criterias) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

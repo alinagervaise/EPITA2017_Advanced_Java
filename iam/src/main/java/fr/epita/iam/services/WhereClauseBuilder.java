@@ -38,6 +38,7 @@ public class WhereClauseBuilder {
 			LOGGER.info(name);
 			Object fieldValue = field.get(obj);
 			LOGGER.info(fieldValue);
+			
 			String fieldWhereclause = name +" =  :" +name;
 			values.put(name, fieldValue);
 			queryString += " "+separator+ " "  + fieldWhereclause;

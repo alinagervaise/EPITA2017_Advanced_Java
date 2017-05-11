@@ -50,7 +50,9 @@ public class Identity {
 	@Column(name="ISADMIN")
 	private boolean isAdmin;
 	
-	@OneToMany(fetch=FetchType.EAGER)
+	@OneToMany
+	//(fetch=FetchType.EAGER)
+	//manytomany
 	@JoinTable(name="iam2017.identity_address",
 		joinColumns = @JoinColumn( name="identity_id"),
 	    inverseJoinColumns = @JoinColumn( name="address_id")

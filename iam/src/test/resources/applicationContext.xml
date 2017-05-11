@@ -4,7 +4,7 @@
         http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
 	<bean id="dao" name="dao" class="fr.epita.iam.services.IdentityJDBCDAO" />
-    <bean id="daoHibernate" name="daoHibernate" class="fr.epita.iam.services.HibernateDAO" />
+    <bean id="daoHibernate" name="daoHibernate" class="fr.epita.iam.services.DAO" />
     <bean id="daoAddress" name="daoAddress" class="fr.epita.iam.services.AddressDAO" />
 
 	<bean

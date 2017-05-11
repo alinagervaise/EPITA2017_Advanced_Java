@@ -28,6 +28,10 @@ public abstract class  IDAO<T> implements Dao<T>{
 	
 	
 	
+	public void setSessionFactory(SessionFactory sf) {
+		this.sf = sf;
+	}
+
 	public void write(T instance){
 		Session session = sf.openSession();
 		Transaction transaction = session.beginTransaction();
@@ -74,5 +78,31 @@ public abstract class  IDAO<T> implements Dao<T>{
 		session.close();
 		return identityList;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> search(T instance, String separator, String ...criterias) throws Exception{
+		
+		if (!(separator.trim().equalsIgnoreCase("and") || separator.trim().equalsIgnoreCase("or")) ){
+			throw new  Exception();
+		}
+		Session session = sf.openSession();
+		List<T> resultList = new ArrayList<T>();
+		
+		try {
+			WhereClauseBuilder cBuilder = new WhereClauseBuilder();
+			Query query = cBuilder.getWhereClause(instance, session, separator, criterias);
+			resultList = query.list();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		session.close();
+		return resultList;
+	}
+
 
 }

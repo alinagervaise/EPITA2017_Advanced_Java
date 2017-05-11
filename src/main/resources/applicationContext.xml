@@ -3,12 +3,22 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
-
+	 <!-- 
+	 	<bean id="dao" name="dao" class="fr.epita.iam.services.IdentityJDBCDAO" />
+    	<bean id="daoHibernate" name="daoHibernate" class="fr.epita.iam.services.DAO" />
+    -->
+    <bean id="addressDAO" name="addressDAO" class="fr.epita.iam.services.AddressDAO">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="identityDAO" name="identityDAO" class="fr.epita.iam.services.IdentityDAO">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+	
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 
 		<property name="location">
-			<value>test.properties</value>
+			<value>classpath:test.properties</value>
 		</property>
 	</bean>
 

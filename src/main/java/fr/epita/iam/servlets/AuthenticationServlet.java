@@ -5,9 +5,11 @@ package fr.epita.iam.servlets;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -22,8 +24,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import fr.epita.iam.datamodel.Identity;
+import fr.epita.iam.services.AddressDAO;
 import fr.epita.iam.services.Dao;
 import fr.epita.iam.services.HibernateDAO;
+import fr.epita.iam.services.IdentityDAO;
 import fr.epita.iam.services.IdentityJDBCDAO;
 
 /**
@@ -31,9 +35,8 @@ import fr.epita.iam.services.IdentityJDBCDAO;
  *
  */
 
-
-@WebServlet(name="AuthenticationServlet", urlPatterns={"/","/authenticate"})
-public class AuthenticationServlet extends HttpServlet{
+@WebServlet(name="AuthenticationServlet", urlPatterns={"/authenticate"})
+public class AuthenticationServlet extends BaseServlet{
 
 	/**
 	 * 
@@ -42,22 +45,26 @@ public class AuthenticationServlet extends HttpServlet{
 	
 	
 	@Inject
-	Dao<Identity> dao1;
+	IdentityDAO identityDao;
 	
+
+	@Inject
+	AddressDAO addressDao;
 	private static final Logger LOGGER = LogManager.getLogger(AuthenticationServlet.class);
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		ApplicationContext context = new ClassPathXmlApplicationContext(
-	            "classpath*:**/applicationContext*.xml");
-
-		HibernateDAO dao = (HibernateDAO) context.getBean("daoHibernate");
-		List<Identity> results;
+		List<Identity> results = new ArrayList<Identity>();
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		Identity identity = new Identity(username, password);
-		results = (List<Identity>)dao.search(identity);
+		try {
+			results = (List<Identity>)identityDao.search(identity, "and", "username", "password");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (results == null || results.size()==0){
 			String error_msg = "Authentification failure for user "+ username;
 			LOGGER.info("Login attempt failure for user {}", username + " "+password);
@@ -76,9 +83,6 @@ public class AuthenticationServlet extends HttpServlet{
 		 
 		}
 			
-			
-		
-		
 	}
 	
 	 @Override
@@ -86,7 +90,6 @@ public class AuthenticationServlet extends HttpServlet{
 	               throws IOException, ServletException {
 	      // Set the response message's MIME type
 		  response.setContentType("text/html");
-	      //response.sendRedirect("index.html");
 		  request.getRequestDispatcher("index.html").include(request, response);  
 	 }
 
