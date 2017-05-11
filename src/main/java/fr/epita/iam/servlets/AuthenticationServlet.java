@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,20 +47,36 @@ public class AuthenticationServlet extends HttpServlet{
 	private static final Logger LOGGER = LogManager.getLogger(AuthenticationServlet.class);
 	
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String username = req.getParameter("usernmae");
-		String password = req.getParameter("password");
-		Identity identity = new Identity("123","Thomas","email@gmail.com");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 	            "classpath*:**/applicationContext*.xml");
 
 		HibernateDAO dao = (HibernateDAO) context.getBean("daoHibernate");
-		
-		//IdentityJDBCDAO dao = (IdentityJDBCDAO) context.getBean("dao");
 		List<Identity> results;
-			results = (List<Identity>)dao.search(identity);
-			LOGGER.info("tried to authenticate with this login {}", username + " "+password);
-			LOGGER.info("tried to authenticate with this login {}", results.get(0));
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		Identity identity = new Identity(username, password);
+		results = (List<Identity>)dao.search(identity);
+		if (results == null || results.size()==0){
+			String error_msg = "Authentification failure for user "+ username;
+			LOGGER.info("Login attempt failure for user {}", username + " "+password);
+			response.setContentType("text/html");
+			request.getRequestDispatcher("index.html").include(request, response);  
+		}
+		else {
+		    Identity user = results.get(0);
+		    LOGGER.info("Authentification success for user {}", username + " "+password);
+		    RequestDispatcher dispatcher = request.getRequestDispatcher("user-home.html");
+		    if (user.isAdmin()){
+		    	dispatcher = request.getRequestDispatcher("admin-home.html");
+		    }
+		    request.setAttribute("username", user.getDisplayName());
+		    dispatcher.include(request, response);
+		 
+		}
+			
+			
 		
 		
 	}

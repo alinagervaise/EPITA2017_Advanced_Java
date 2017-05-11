@@ -23,6 +23,11 @@ public class WhereClauseBuilder {
 	
 	
 	public Query getWhereClause(Object obj, Session session) throws IllegalArgumentException, IllegalAccessException{
+		return getWhereClause(obj, session, "and");
+		
+	}
+	
+	public Query getWhereClause(Object obj, Session session, String separator) throws IllegalArgumentException, IllegalAccessException{
 		String queryString = "";
 		Field[] fields = obj.getClass().getDeclaredFields();
 		Map<String, Object> values = new LinkedHashMap<String, Object>();
@@ -35,7 +40,7 @@ public class WhereClauseBuilder {
 			LOGGER.info(fieldValue);
 			String fieldWhereclause = name +" =  :" +name;
 			values.put(name, fieldValue);
-			queryString += " and " + fieldWhereclause;
+			queryString += " "+separator+ " "  + fieldWhereclause;
 		}
 		if (!queryString.isEmpty()){
 			queryString = "from " + obj.getClass().getSimpleName() + " where 1=1 " + queryString;
@@ -51,6 +56,50 @@ public class WhereClauseBuilder {
 		
 		
 	}
+	public Query getWhereClause(Object obj, Session session, String separator, String ... properties) throws IllegalArgumentException, IllegalAccessException{
+		String queryString = "";
+		Field[] fields = obj.getClass().getDeclaredFields();
+		Map<String, Object> values = new LinkedHashMap<String, Object>();
+		
+		for (String property : properties){
+			for (int i = 0; i < fields.length; i++) {
+				Field field = fields[i];
+				field.setAccessible(true);
+				String name = field.getName();
+	
+				if (property.trim().equalsIgnoreCase(name)){
+					LOGGER.info(name);
+					Object fieldValue = field.get(obj);
+					LOGGER.info(fieldValue);
+					String fieldWhereclause = name +" =  :" +name;
+					if (values.isEmpty()){
+						queryString += " "  + fieldWhereclause;
+					}
+					else{
+						queryString += " "+separator+ " "  + fieldWhereclause;
+					}
+					values.put(name, fieldValue);
+					
+					
+				}
+			}
+		}
+		if (!queryString.isEmpty()){
+			queryString = "from " + obj.getClass().getSimpleName() + " where  " + queryString;
+		}
+		LOGGER.info("queryString ------- \n:"+queryString);
+		Query query = session.createQuery(queryString);
+		String[] namedParameters = query.getNamedParameters();
+		for (String parameter : namedParameters) {
+			query.setParameter(parameter, values.get(parameter));
+		}
+		LOGGER.info("queryString ==========\n:"+ query.list());
+		
+		return query;
+		
+		
+	}
+	
 	
 
 }

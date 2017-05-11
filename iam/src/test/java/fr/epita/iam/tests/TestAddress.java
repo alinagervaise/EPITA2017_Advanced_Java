@@ -19,6 +19,7 @@ import fr.epita.iam.services.HibernateDAO;
 import fr.epita.iam.services.IdentityJDBCDAO;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -61,42 +62,31 @@ public class TestAddress {
 		address1.setCountry("France");
 		daoAddress.write(address1);
 		
-		//Create Address 1
+		//Create Address 2
 		Address address2 = new Address();
-		address2.setStreet("14, rue Voltaire");
+		address2.setStreet("16, rue Voltaire");
 		address2.setCity("Kremlin-Bicêtre");
 		address2.setZipCode("94270");
 		address2.setCountry("France");
 		daoAddress.write(address2);
 		
-		address1.setIdentity(identity);
-		address2.setIdentity(identity);
-		daoAddress.update(address1);
-		daoAddress.update(address2);
+		identity.setAddress(address1);
+		identity.setAddress(address2);
+		daoHibernate.update(identity);
 		
-		List<Address> results = daoAddress.search(address2);
+		List<Identity> results = daoHibernate.search(identity);
 		Assert.assertTrue(results != null && !results.isEmpty());
 		Assert.assertEquals(1, results.size());
 		
-		Address resultedAddress = results.get(0);
-		Assert.assertEquals("Thomas Broussard", resultedAddress.getIdentity().getDisplayName());
+		Identity result = results.get(0);
+		Assert.assertEquals("Thomas Broussard", result.getDisplayName());
 		
-		results = daoAddress.search(address2);
-		Assert.assertTrue(results != null && !results.isEmpty());
-		Assert.assertEquals(1, results.size());
+		Set<Address> i_Addresses = result.getAddresses();
+		Assert.assertTrue(i_Addresses  != null && !i_Addresses.isEmpty());
+		LOGGER.info("---------"+i_Addresses);
+		Assert.assertEquals(2, i_Addresses.size());
 		
-		resultedAddress = results.get(0);
-		Assert.assertEquals("Thomas Broussard", resultedAddress.getIdentity().getDisplayName());
-		
-		// test that when deleting and address , identity table remains the same
-		daoAddress.delete(resultedAddress);
-		List<Identity> identities = daoHibernate.search(identity);
-		Assert.assertTrue(identities != null && !identities.isEmpty());
-		Assert.assertEquals(1, identities.size());
-		
-		results = daoAddress.search(address1);
-		Assert.assertTrue(results != null && !results.isEmpty());
-		Assert.assertEquals(1, results.size());
+	
 	}
 
 }

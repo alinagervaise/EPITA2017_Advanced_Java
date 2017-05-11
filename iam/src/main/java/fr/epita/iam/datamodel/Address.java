@@ -32,8 +32,9 @@ public class Address {
 	@Column(name="COUNTRY")
 	private String country;
 	
-	@ManyToOne(cascade=CascadeType.DETACH)
-	private Identity identity;
+	//@ManyToOne(cascade=CascadeType.DETACH)
+	//private Identity identity;
+	
 	public Address(){
 		
 	}
@@ -85,13 +86,14 @@ public class Address {
 		this.country = country;
 	}
 	
-	
+	/*
 	public Identity getIdentity() {
 		return identity;
 	}
 	public void setIdentity(Identity identity) {
 		this.identity = identity;
 	}
+	*/
 	@Override
 	public int hashCode() {
 		final int prime = 31;

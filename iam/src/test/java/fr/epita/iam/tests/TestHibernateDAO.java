@@ -49,7 +49,7 @@ public class TestHibernateDAO {
 		identity.setDisplayName("Tom");
 		dao.update(identity);
 		
-		Identity criteria = new Identity(null, "Tom", null);
+		Identity criteria = new Identity("123", "Thomas Broussard", "tbr@tbr.com");
 		
 		
 		List<Identity> results = dao.search(criteria);
