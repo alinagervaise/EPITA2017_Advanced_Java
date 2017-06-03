@@ -4,6 +4,8 @@
 package fr.epita.iam.servlets;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +88,23 @@ public class CreateIdentityServlet extends BaseServlet{
 			String zipCode = request.getParameter("zipCode");
 			String city = request.getParameter("city");
 			String country = request.getParameter("country");
+			
+			Identity identity = new Identity("", firstname, email);
+			SimpleDateFormat sm = new SimpleDateFormat("dd/mm/yyyy");
+			try {
+				identity.setBirthdate(sm.parse(birthdate));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			identity.setLastname(lastname);
+			identityDao.write(identity);
+			
+			Address address = new Address(street, zipCode, city, country);
+			addressDao.write(address);
+			
+			identity.setAddress(address);
+			identityDao.update(identity);
 		    LOGGER.info("\n Authentification success for user {}", username + " "
 		    												+ firstname+" "
 		    												+lastname +" "

@@ -32,7 +32,7 @@
 					</div>
 					<div class="form-group">
 						<label>Email</label>
-						<input name="email" class="form-control" id="email" type="text" 
+						<input name="email" class="form-control" id="email" type="email" 
 						value="${email}" placeholder="Enter your email"/>
 					</div>
 					<div class="form-group">
@@ -78,16 +78,12 @@
 
 <script>
     $(document).ready(function(){
-        var date_input=$('input[name="birthdate"]'); //our date input has the name "birthdate"
-        var container=$('.identity-div form').length>0 ? $('.identity-div form').parent() : "body";
-        console.log (date_input);
-        console.log (container);
-        date_input.datepicker({
-            format: 'dd/mm/yyyy',
-            container: container,
-            orientation: "bottom right",
-            todayHighlight: true,
-            autoclose: true,
-        });
+    	$('#birthdate input').datepicker({
+    		 format: 'dd/mm/yyyy',
+    		 orientation: "bottom right",
+             todayHighlight: true,
+             autoclose: true,
+    	});
+       
     });
 </script>
