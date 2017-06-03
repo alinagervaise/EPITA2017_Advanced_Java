@@ -4,38 +4,32 @@
 package fr.epita.iam.servlets;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import fr.epita.iam.datamodel.Address;
 import fr.epita.iam.datamodel.Identity;
-import fr.epita.iam.services.AddressDAO;
-import fr.epita.iam.services.Dao;
-import fr.epita.iam.services.HibernateDAO;
-import fr.epita.iam.services.IdentityDAO;
-import fr.epita.iam.services.IdentityJDBCDAO;
+import fr.epita.iam.datamodel.User;
+import fr.epita.iam.services.DefaultDAO;
+
 
 /**
  * @author tbrou
  *
  */
 
-@WebServlet(name="AuthenticationServlet", urlPatterns={"/authenticate"})
+@WebServlet(name="AuthenticationServlet", urlPatterns={"/", "/authenticate"})
 public class AuthenticationServlet extends BaseServlet{
 
 	/**
@@ -45,40 +39,51 @@ public class AuthenticationServlet extends BaseServlet{
 	
 	
 	@Inject
-	IdentityDAO identityDao;
-	
+	//IdentityDAO identityDao;
+	DefaultDAO<Identity>identityDao;
 
 	@Inject
-	AddressDAO addressDao;
+	//AddressDAO addressDao;
+	DefaultDAO<Address>addressDao;
+	
+	@Inject
+	//UserDAO userDao;
+	DefaultDAO<User>userDao;
+	
+	
 	private static final Logger LOGGER = LogManager.getLogger(AuthenticationServlet.class);
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		List<Identity> results = new ArrayList<Identity>();
+		List<User> results = new ArrayList<User>();
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		Identity identity = new Identity(username, password);
+		User user = new User(username, password);
 		try {
-			results = (List<Identity>)identityDao.search(identity, "and", "username", "password");
+			results = (List<User>)userDao.search(user, "and", "username", "password");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (results == null || results.size()==0){
-			String error_msg = "Authentification failure for user "+ username;
+		if (results == null || results.isEmpty()){
+			String error_msg = "Login attempt failure for user "+ username;
 			LOGGER.info("Login attempt failure for user {}", username + " "+password);
 			response.setContentType("text/html");
-			request.getRequestDispatcher("index.html").include(request, response);  
+			request.setAttribute("error_msg", error_msg);
+			request.getRequestDispatcher("index.jsp").include(request, response);  
 		}
 		else {
-		    Identity user = results.get(0);
+		    user = results.get(0);
+		    HttpSession session = request.getSession();
+		    session.setAttribute("displayName", user.getIdentity().getDisplayName());
+		    session.setAttribute("username", username);
 		    LOGGER.info("Authentification success for user {}", username + " "+password);
-		    RequestDispatcher dispatcher = request.getRequestDispatcher("user-home.html");
+		    RequestDispatcher dispatcher = request.getRequestDispatcher("user-home.jsp");
 		    if (user.isAdmin()){
-		    	dispatcher = request.getRequestDispatcher("admin-home.html");
+		    	dispatcher = request.getRequestDispatcher("admin-home.jsp");
 		    }
-		    request.setAttribute("username", user.getDisplayName());
+		    request.setAttribute("username", user.getIdentity().getDisplayName());
 		    dispatcher.include(request, response);
 		 
 		}
@@ -90,7 +95,8 @@ public class AuthenticationServlet extends BaseServlet{
 	               throws IOException, ServletException {
 	      // Set the response message's MIME type
 		  response.setContentType("text/html");
-		  request.getRequestDispatcher("index.html").include(request, response);  
+		  request.getRequestDispatcher("index.jsp").include(request, response);  
+		  //response.sendRedirect("index.jsp");
 	 }
 
 

@@ -10,13 +10,23 @@
 		<param-value>classpath:applicationContext.xml</param-value>
 	</context-param>
   	
+    <servlet>
+        <servlet-name>AuthenticationServlet</servlet-name>
+        <servlet-class>fr.epita.iam.servlets.AuthenticationServlet</servlet-class>
+    </servlet>
+     <servlet>
+        <servlet-name>CreateIdentityServlet</servlet-name>
+        <servlet-class>fr.epita.iam.servlets.CreateIdentityServlet</servlet-class>
+    </servlet>
    <servlet-mapping>
       <servlet-name>AuthenticationServlet</servlet-name>
       <url-pattern>/authenticate</url-pattern>
-     
    </servlet-mapping>
-  	
-  	
+ 
+  	<servlet-mapping>
+      <servlet-name>CreateIdentityServlet</servlet-name>
+      <url-pattern>/create</url-pattern>
+   </servlet-mapping>
    
 
 </web-app>

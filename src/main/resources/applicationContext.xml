@@ -1,22 +1,21 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
-
-	 <!-- 
-	 	<bean id="dao" name="dao" class="fr.epita.iam.services.IdentityJDBCDAO" />
-    	<bean id="daoHibernate" name="daoHibernate" class="fr.epita.iam.services.DAO" />
-    -->
-    <bean id="addressDAO" name="addressDAO" class="fr.epita.iam.services.AddressDAO">
-    	<property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-    <bean id="identityDAO" name="identityDAO" class="fr.epita.iam.services.IdentityDAO">
-    	<property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/jdbc
+        http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd ">
+	
+	<context:annotation-config />
+	<context:component-scan base-package="fr.epita.iam.services" />
+
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-
 		<property name="location">
 			<value>classpath:test.properties</value>
 		</property>
@@ -30,6 +29,7 @@
 		<property name="url" value="${jdbc.connection.string}" />
 		<property name="username" value="${jdbc.connection.username}" />
 		<property name="password" value="${jdbc.connection.password}" />
+		
 	</bean>
 
 	<bean id="sessionFactory"
@@ -41,11 +41,15 @@
 				<prop key="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.import_files">init_db.sql</prop>
 			</props>
 		</property>
 	</bean>
-
-
+	<!--  
+	<jdbc:initialize-database data-source="dataSourceBean" enabled="true">
+    	<jdbc:script location="classpath:init_db.sql" />
+	</jdbc:initialize-database>
+	-->
 
 
 

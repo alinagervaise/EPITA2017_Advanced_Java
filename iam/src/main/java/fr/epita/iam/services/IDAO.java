@@ -12,6 +12,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 import fr.epita.iam.datamodel.Identity;
 
@@ -21,17 +22,19 @@ import fr.epita.iam.datamodel.Identity;
  * @param T:
  *
  */
+
+
 public abstract class  IDAO<T> implements Dao<T>{
 	
 	@Inject
 	SessionFactory sf;
 	
 	
-	
+	/*
 	public void setSessionFactory(SessionFactory sf) {
 		this.sf = sf;
 	}
-
+*/
 	public void write(T instance){
 		Session session = sf.openSession();
 		Transaction transaction = session.beginTransaction();

@@ -13,6 +13,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import fr.epita.iam.datamodel.Identity;
@@ -21,18 +22,17 @@ import fr.epita.iam.datamodel.Identity;
  * @author tbrou
  *
  */
-@Service
+@Repository
 public class HibernateDAO implements Dao<Identity>{
 	
 	@Inject
-	
 	SessionFactory sf;
 	
 	
-	
+	/*
 	public void setSessionFactory(SessionFactory sf) {
 		this.sf = sf;
-	}
+	}*/
 
 	public void write(Identity identity){
 		Session session = sf.openSession();
