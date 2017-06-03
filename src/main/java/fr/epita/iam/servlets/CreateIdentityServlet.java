@@ -105,15 +105,7 @@ public class CreateIdentityServlet extends BaseServlet{
 			
 			identity.setAddress(address);
 			identityDao.update(identity);
-		    LOGGER.info("\n Authentification success for user {}", username + " "
-		    												+ firstname+" "
-		    												+lastname +" "
-		    												+birthdate+" "
-		    												+email+" "
-		    												+street+ " "
-		    												+zipCode +" "
-		    												+city+" "
-		    												+country+"  \n");
+		
 		    RequestDispatcher dispatcher = request.getRequestDispatcher("search-identity.jsp");
 		    dispatcher.include(request, response);
 		}	
