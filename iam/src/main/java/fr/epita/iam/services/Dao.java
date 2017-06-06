@@ -18,5 +18,6 @@ public interface Dao<T> {
 	public void update(T instance);
 	public List<T> search(T instance);
 	public List<T> search(T instance, String separator, String ...criterias) throws Exception;
+	public List<T> search(T instance, String separator, List<String> criterias) throws Exception;
 
 }

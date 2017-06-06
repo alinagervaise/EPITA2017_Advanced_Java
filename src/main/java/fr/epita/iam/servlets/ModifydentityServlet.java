@@ -31,8 +31,8 @@ import fr.epita.iam.services.DefaultDAO;
  *
  */
 
-@WebServlet(name="AuthenticationServlet", urlPatterns={"/create"})
-public class CreateIdentityServlet extends BaseServlet{
+@WebServlet(name="AuthenticationServlet", urlPatterns={"/modify"})
+public class ModifydentityServlet extends BaseServlet{
 
 	/**
 	 * 
@@ -53,7 +53,7 @@ public class CreateIdentityServlet extends BaseServlet{
 	DefaultDAO<User>userDao;
 	
 	
-	private static final Logger LOGGER = LogManager.getLogger(CreateIdentityServlet.class);
+	private static final Logger LOGGER = LogManager.getLogger(ModifydentityServlet.class);
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -89,7 +89,7 @@ public class CreateIdentityServlet extends BaseServlet{
 			String city = request.getParameter("city");
 			String country = request.getParameter("country");
 			
-			Identity identity = new Identity("", displayName, email);
+			Identity identity = new Identity("", firstname, email);
 			SimpleDateFormat sm = new SimpleDateFormat("dd/mm/yyyy");
 			try {
 				identity.setBirthdate(sm.parse(birthdate));
@@ -97,7 +97,6 @@ public class CreateIdentityServlet extends BaseServlet{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			identity.setFirstname(firstname);
 			identity.setLastname(lastname);
 			identityDao.write(identity);
 			
@@ -117,7 +116,7 @@ public class CreateIdentityServlet extends BaseServlet{
 	               throws IOException, ServletException {
 	      // Set the response message's MIME type
 		  response.setContentType("text/html");
-		  request.getRequestDispatcher("create-identity.jsp").include(request, response);  
+		  request.getRequestDispatcher("modify-identity.jsp").include(request, response);  
 	 }
 
 

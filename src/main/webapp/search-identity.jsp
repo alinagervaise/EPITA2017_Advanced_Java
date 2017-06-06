@@ -5,6 +5,7 @@
 <head>
 	<title>Welcome Page </title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 </head>
 
 <body>
@@ -80,41 +81,29 @@
                         <th>UID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
+                        <th>Birthdate</th>
                         <th>Email</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td><input name="selection" type="radio" /></td>
-                        <td>1</td>
-                        <td>Thomas</td>
-                        <td>Broussard</td>
-                        <td>tbr@acompany.com</td>
-                    </tr>
-
-                    <tr>
-                        <td><input name="selection" type="radio" /></td>
-                        <td>2</td>
-                        <td>David</td>
-                        <td>Mahery</td>
-                        <td>dma@acompany.com</td>
-                    </tr>
-
-                    <tr>
-                        <td><input name="selection" type="radio" /></td>
-                        <td>3</td>
-                        <td>Quentin</td>
-                        <td>Serrano</td>
-                        <td>qse@acompany.com</td>
-                    </tr>
-
+                      <c:forEach  var="identity" items="${identities}">
+		                    <tr>
+		                        <td> <input name="selection" type="radio" id='<c:out value="${identity.id}"/> ' class="radio-btn" /> </td>
+		                        
+		                        <td> <c:out value="${identity.uid}" /> </td>
+		                        <td> <c:out value="${identity.firstname}"/> </td>
+		                        <td> <c:out value="${identity.lastname}"/> </td>
+		                        <td> <c:out value="${identity.birthdate}"/> </td>
+		                        <td> <c:out value="${identity.email}"/> </td>
+		                    </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
             </div>
             <div class="form-group">
                 <div class=" col-sm-offset-2 col-sm-10 text-right">
-                    <button type="submit" href="modify" class="btn btn-primary">Modify</button>
-                    <button type="submit" href="delete" class="btn btn-primary">Delete</button>
+                    <button type="submit" href="modify" class="btn btn-primary submit-btn">Modify</button>
+                    <button type="submit" href="delete" class="btn btn-primary submit-btn">Delete</button>
                     <button type="submit" href="cancel" class="btn btn-default">Cancel</button>
                 </div>
             </div>
@@ -124,3 +113,14 @@
     </div>
 
 </body>
+
+<script>
+    $(document).ready(function(){
+    	console.log("HERE----->"+ $(".submit-btn").attr('href').text);
+    	$('.radio-btn').click(function () {
+            if ($(this).is(':checked')) {
+                alert("Allot Thai Gayo Bhai");
+            }
+        });
+    });
+</script>

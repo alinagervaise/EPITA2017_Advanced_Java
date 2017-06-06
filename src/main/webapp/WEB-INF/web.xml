@@ -18,6 +18,14 @@
         <servlet-name>CreateIdentityServlet</servlet-name>
         <servlet-class>fr.epita.iam.servlets.CreateIdentityServlet</servlet-class>
     </servlet>
+     <servlet>
+        <servlet-name>SearchIdentityServlet</servlet-name>
+        <servlet-class>fr.epita.iam.servlets.SearchIdentityServlet</servlet-class>
+    </servlet>
+     <servlet>
+        <servlet-name>ModifyIdentityServlet</servlet-name>
+        <servlet-class>fr.epita.iam.servlets.ModifyIdentityServlet</servlet-class>
+    </servlet>
    <servlet-mapping>
       <servlet-name>AuthenticationServlet</servlet-name>
       <url-pattern>/authenticate</url-pattern>
@@ -26,6 +34,15 @@
   	<servlet-mapping>
       <servlet-name>CreateIdentityServlet</servlet-name>
       <url-pattern>/create</url-pattern>
+   </servlet-mapping>
+    <servlet-mapping>
+      <servlet-name>SearchIdentityServlet</servlet-name>
+      <url-pattern>/search</url-pattern>
+   </servlet-mapping>
+ 
+  	<servlet-mapping>
+      <servlet-name>ModifyIdentityServlet</servlet-name>
+      <url-pattern>/modify</url-pattern>
    </servlet-mapping>
    
 

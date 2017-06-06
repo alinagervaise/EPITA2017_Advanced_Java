@@ -5,6 +5,7 @@ package fr.epita.iam.services;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -63,6 +64,9 @@ public class WhereClauseBuilder {
 		Map<String, Object> values = new LinkedHashMap<String, Object>();
 		
 		for (String property : properties){
+			if (property == null || property.isEmpty()){
+				continue;
+			}
 			for (int i = 0; i < fields.length; i++) {
 				Field field = fields[i];
 				field.setAccessible(true);
@@ -88,19 +92,59 @@ public class WhereClauseBuilder {
 		if (!queryString.isEmpty()){
 			queryString = "from " + obj.getClass().getSimpleName() + " where  " + queryString;
 		}
-		LOGGER.info("queryString ------- \n:"+queryString);
 		Query query = session.createQuery(queryString);
 		String[] namedParameters = query.getNamedParameters();
 		for (String parameter : namedParameters) {
 			query.setParameter(parameter, values.get(parameter));
 		}
-		LOGGER.info("queryString ==========\n:"+ query.list());
-		
 		return query;
 		
 		
 	}
 	
+	public Query getWhereClause(Object obj, Session session, String separator, List<String> properties) throws IllegalArgumentException, IllegalAccessException{
+		String queryString = "";
+		Field[] fields = obj.getClass().getDeclaredFields();
+		Map<String, Object> values = new LinkedHashMap<String, Object>();
+		
+		for (String property : properties){
+			if (property == null || property.isEmpty()){
+				continue;
+			}
+			for (int i = 0; i < fields.length; i++) {
+				Field field = fields[i];
+				field.setAccessible(true);
+				String name = field.getName();
 	
+				if (property.trim().equalsIgnoreCase(name)){
+					LOGGER.info(name);
+					Object fieldValue = field.get(obj);
+					LOGGER.info(fieldValue);
+					String fieldWhereclause = name +" =  :" +name;
+					if (values.isEmpty()){
+						queryString += " "  + fieldWhereclause;
+					}
+					else{
+						queryString += " "+separator+ " "  + fieldWhereclause;
+					}
+					values.put(name, fieldValue);
+					
+					
+				}
+			}
+		}
+		if (!queryString.isEmpty()){
+			queryString = "from " + obj.getClass().getSimpleName() + " where  " + queryString;
+		}
+		Query query = session.createQuery(queryString);
+		String[] namedParameters = query.getNamedParameters();
+		for (String parameter : namedParameters) {
+			LOGGER.info("------------------------------------------"+parameter);
+			query.setParameter(parameter, values.get(parameter));
+		}
+		return query;
+		
+		
+	}
 
 }
