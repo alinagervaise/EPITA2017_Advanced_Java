@@ -9,7 +9,7 @@
 
 <body>
 	<div class="container">
-    	<h3>New Identity Creation</h3>
+    	<h3>Modify Identity </h3>
 		<p><a href=""> >> back </a></p>
     	<div class="row">
         	<form role="form" action="modify" method="post">
@@ -17,38 +17,46 @@
 					<h4>About you</h4>
 					<div class="form-group">
 						<label>First Name</label>
-						<input name="firstname" class="form-control" id="firstname" type="text"  placeholder="firstname"/>
+						<input name="firstname" class="form-control" id="firstname" type="text"
+						  placeholder=" <c:out value="${identity.firstname}" />"/>
 					</div>
 					<div class="form-group">
 						<label>Last name</label>
-						<input name="lastname" class="form-control" type="text" placeholder="Last name" />
+						<input name="lastname" class="form-control" type="text"
+						 placeholder=" <c:out value="${identity.lastname}" />" />
 					</div>
 					<div class="form-group">
 						<label>Email</label>
-						<input name="email" class="form-control" id="email" type="text"  placeholder="Enter your email"/>
+						<input name="email" class="form-control" id="email" type="text" 
+						 placeholder=" <c:out value="${identity.email}" />"/>
 					</div>
 					<div class="form-group">
 						<label>Birthday</label>
-						<input name="birthday" class="form-control" type="date" placeholder="jj/mm/aaaa" />
+						<input name="birthday" class="form-control" type="date"
+						 placeholder=" <c:out value="${identity.birthdate}" />" />
 					</div>
 				</div>
 				<div class="col-xs-6">
 					<h4>Address</h4>
 					<div class="form-group">
 						<label>Street</label>
-						<input name="street" class="form-control" id="street" type="text"  placeholder="street"/>
+						<input name="street" class="form-control" id="street" type="text" 
+						 placeholder=" <c:out value="${address.street}" />"/>
 					</div>
 					<div class="form-group">
 						<label>Zip Code</label>
-						<input name="zipcode" class="form-control" type="text" placeholder="Zip Code" />
+						<input name="zipcode" class="form-control" type="text" 
+						placeholder=" <c:out value="${address.zipCode}" />" />
 					</div>
 					<div class="form-group">
 						<label>City</label>
-						<input name="city" class="form-control" id="city" type="text"  placeholder="city"/>
+						<input name="city" class="form-control" id="city" type="text"
+						  placeholder=" <c:out value="${address.city}" />"/>
 					</div>
 					<div class="form-group">
 						<label>Country</label>
-						<input name="country" class="form-control" type="text" placeholder="country" />
+						<input name="country" class="form-control" type="text" 
+						placeholder= <c:out value="${address.country}" /> />
 					</div>
 				</div>
             	<button type="submit" class="btn btn-default">Submit</button>

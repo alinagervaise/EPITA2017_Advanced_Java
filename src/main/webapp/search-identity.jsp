@@ -89,7 +89,6 @@
                       <c:forEach  var="identity" items="${identities}">
 		                    <tr>
 		                        <td> <input name="selection" type="radio" id='<c:out value="${identity.id}"/> ' class="radio-btn" /> </td>
-		                        
 		                        <td> <c:out value="${identity.uid}" /> </td>
 		                        <td> <c:out value="${identity.firstname}"/> </td>
 		                        <td> <c:out value="${identity.lastname}"/> </td>
@@ -102,9 +101,9 @@
             </div>
             <div class="form-group">
                 <div class=" col-sm-offset-2 col-sm-10 text-right">
-                    <button type="submit" href="modify" class="btn btn-primary submit-btn">Modify</button>
-                    <button type="submit" href="delete" class="btn btn-primary submit-btn">Delete</button>
-                    <button type="submit" href="cancel" class="btn btn-default">Cancel</button>
+                    <a  href="modify" class="btn btn-primary submit-btn">Modify</a>
+                    <a  href="delete" class="btn btn-primary submit-btn">Delete</a>
+                    <a  href="cancel" class="btn btn-default">Cancel</a>
                 </div>
             </div>
         </form>
@@ -116,10 +115,10 @@
 
 <script>
     $(document).ready(function(){
-    	console.log("HERE----->"+ $(".submit-btn").attr('href').text);
-    	$('.radio-btn').click(function () {
-            if ($(this).is(':checked')) {
-                alert("Allot Thai Gayo Bhai");
+    	console.log("HERE----->"+ $(".submit-btn").attr('href'));
+    	$('.submit-btn').click(function () {
+            if ($('.radio-btn').is(':checked')) {
+                $(this).attr('href', $(this).attr('href')+ "?id="+$('.radio-btn').attr("id"));
             }
         });
     });

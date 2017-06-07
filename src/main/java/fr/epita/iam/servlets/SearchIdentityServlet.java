@@ -89,6 +89,9 @@ public class SearchIdentityServlet extends BaseServlet{
 	    	}
 	    	System.out.println("POST--------------2---------------"+searchByIdentity + searchByAddress+resultIdentities.size());
 	    	request.setAttribute("identities", resultIdentities);
+	    	for(Identity i : resultIdentities){
+	    		System.out.println("POST--------------2---------------"+i);
+	    	}
 	    	dispatcher.include(request, response);
 			return;
 	    }
