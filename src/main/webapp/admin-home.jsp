@@ -5,7 +5,7 @@
 	<head>
 	<title> Home Page </title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
-	
+	<link rel="stylesheet" type="text/css" href="css/iam.css"/>
 	</head>
 	
 	<body>
@@ -13,7 +13,7 @@
 			<div class="row" style="margin:20px; width: 60%; ">
 				<div  style="padding: 10px; background-color: #eeeeee; border: 2px  solid #000000; border-radius:10px;">
 					<p style="font-size: 60px;">Welcome to the IAM System</p>
-					<p><a href="">Disconnect</a></p>
+					<p><a href="<c:url value="disconnect"/>">Disconnect</a></p>
 				</div>
 			</div>
 			<div class="row"  >

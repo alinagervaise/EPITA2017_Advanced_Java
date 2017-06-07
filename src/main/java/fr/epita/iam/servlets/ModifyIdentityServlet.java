@@ -75,7 +75,7 @@ public class ModifyIdentityServlet extends BaseServlet{
 			String country = request.getParameter("country");
 			
 			Identity identity = new Identity("", firstname, email);
-			SimpleDateFormat sm = new SimpleDateFormat("yyyy-mm-dd");
+			SimpleDateFormat sm = new SimpleDateFormat("dd/mm/yyyy");
 			try {
 				if (birthdate == null || birthdate.isEmpty()){
 					identity.setBirthdate(null);
@@ -144,6 +144,8 @@ public class ModifyIdentityServlet extends BaseServlet{
 			if (!result.getAddresses().isEmpty()){
 				address = result.getAddresses().stream().findFirst().get();
 			}
+			//SimpleDateFormat sm = new SimpleDateFormat("dd/mm/yyyy");
+			
 			request.setAttribute("identity", result);
 			request.setAttribute("address", address);
 		} catch (Exception e) {

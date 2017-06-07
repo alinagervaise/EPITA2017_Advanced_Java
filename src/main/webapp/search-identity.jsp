@@ -6,12 +6,13 @@
 	<title>Welcome Page </title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
 	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/iam.css"/>
 </head>
 
 <body>
 	<div class="container">
     	<h3>Search Identity</h3>
-		<p><a href=""> >> back </a></p>
+		<p><a href="<c:url value = "/admin-home.jsp"/>"> >> back </a></p>
     	<div>
         	<form role="form" action="search" method="post">
 				<h4>Search Critera</h4>
@@ -36,8 +37,9 @@
 					</div>
 					<div class="col-sm-3">
 						<div class="form-group">
-							<label>Birthday</label>
-							<input name="birthday" class="form-control" type="date" placeholder="jj/mm/aaaa" />
+							<label>Birthdate</label>
+							<input name="birthdate" class="form-control" type="date"
+						 value=" <c:out value="${identity.birthdate}" />" />
 						</div>
 					</div>
 				</div>
@@ -68,11 +70,18 @@
 						</div>
 					</div>
 				</div>
+				
             	<button type="submit" class="btn btn-primary">Search</button>
         	</form>
 			
 			<!-- search results  -->
+			 
 			<form xmlns="http://www.w3.org/1999/xhtml" class="form-horizontal">
+			<c:if test="${error_msg != null}">
+            		<div class="form-group">
+        				<label class="error">${error_msg}</label>
+            		</div>
+            	</c:if>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
@@ -115,7 +124,6 @@
 
 <script>
     $(document).ready(function(){
-    	console.log("HERE----->"+ $(".submit-btn").attr('href'));
     	$('.submit-btn').click(function () {
             if ($('.radio-btn').is(':checked')) {
                 $(this).attr('href', $(this).attr('href')+ "?id="+$('.radio-btn').attr("id"));

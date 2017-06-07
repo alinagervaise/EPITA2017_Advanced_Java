@@ -7,7 +7,7 @@
 	<title> Home Page </title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	
+	<link rel="stylesheet" type="text/css" href="css/iam.css"/>
 	</head>
 	
 	<body>
@@ -17,7 +17,7 @@
 					<%String val = (String)session.getAttribute("displayName");  %>
 					<p>Hello <%=val%></p>
 					<p style="font-size: 60px;">Welcome to the IAM System</p>
-					<P> Sorry your home page is not configured yet. Contact the administrator. </P>
+					<P  class="error"> Sorry your home page is not configured yet. Contact the administrator. </P>
 					<p><a href="/logout">Disconnect</a></p>
 				</div>
 			</div>

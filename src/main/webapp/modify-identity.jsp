@@ -5,12 +5,13 @@
 <head>
 	<title>Welcome Page </title>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="css/iam.css"/>
 </head>
 
 <body>
 	<div class="container">
     	<h3>Modify Identity </h3>
-		<p><a href=""> >> back </a></p>
+		<p><a href="<c:url value = "/admin-home.jsp"/>"> >> back </a></p>
     	<div class="row">
         	<form role="form" action="modify" method="post">
 				<div class="col-xs-6">
@@ -59,6 +60,11 @@
 						value="<c:out value="${address.country}" />" />
 					</div>
 				</div>
+				<c:if test="${error_msg != null}">
+            		<div class="form-group">
+        				<label class="error">${error_msg}</label>
+            		</div>
+            	</c:if>
             	<button type="submit" class="btn btn-default">Submit</button>
         	</form>
     

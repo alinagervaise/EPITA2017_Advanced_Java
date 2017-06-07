@@ -66,6 +66,7 @@ public class SearchIdentityServlet extends BaseServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// get the user name from the current session
 		HttpSession session = request.getSession();
+		System.out.println("-------------------------------"+request.getHeader("referer"));
 		List<Identity>identities, resultIdentities;
 		List<Address> addresses , resultAddresses;
 		resultIdentities = new ArrayList<>();
@@ -74,8 +75,11 @@ public class SearchIdentityServlet extends BaseServlet{
 		RequestDispatcher dispatcher = request.getRequestDispatcher("search-identity.jsp");
 		boolean searchByIdentity = IdentityService.searchByIdentity(request);
 		boolean searchByAddress = IdentityService.searchByAddress(request);
-		
+		String error_msg ;
 	    if (!searchByIdentity && !searchByAddress){
+	    	error_msg = "Please enter a search criteria";
+			LOGGER.debug(error_msg);
+			request.setAttribute("error_msg", error_msg);
 			dispatcher.include(request, response);
 			return;
 	    }
@@ -84,12 +88,24 @@ public class SearchIdentityServlet extends BaseServlet{
 	    	for(Address address : addresses){
 	    		resultIdentities.add(address.getIdentity());
 	    	}
+	    	if (resultIdentities.isEmpty()){
+	    		error_msg = "Could not find result for your search";
+	    		LOGGER.debug(error_msg);
+				request.setAttribute("error_msg", error_msg);
+	    	}
+			
 	    	request.setAttribute("identities", resultIdentities);
 	    	dispatcher.include(request, response);
 			return;
 	    }
 	    else if (searchByIdentity){
 	    	identities = IdentityService.findIdentity(request, identityDao);
+	    	if (identities.isEmpty()){
+	    		error_msg = "Could not find result for your search";
+	    		LOGGER.debug(error_msg);
+				request.setAttribute("error_msg", error_msg);
+	    	}
+			
 	    	request.setAttribute("identities", identities);
 	    	dispatcher.include(request, response);
 			return;
@@ -104,6 +120,12 @@ public class SearchIdentityServlet extends BaseServlet{
 				}
 			}
 		}
+		if (resultIdentities.isEmpty()){
+    		error_msg = "Could not find result for your search";
+    		LOGGER.debug(error_msg);
+			request.setAttribute("error_msg", error_msg);
+    	}
+		
 		request.setAttribute("identities", resultIdentities);
 		dispatcher.include(request, response);
 		

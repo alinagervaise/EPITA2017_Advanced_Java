@@ -145,6 +145,9 @@ public class DeleteIdentityServlet extends BaseServlet{
 				String error_msg = "Sorry you cannot delete yourself";
 				LOGGER.debug(error_msg);
 				request.setAttribute("error_msg", error_msg);
+				response.setContentType("text/html");
+				request.getRequestDispatcher("search-identity.jsp").include(request, response);  
+				return;
 			}
 			identityDao.delete(result);
 			

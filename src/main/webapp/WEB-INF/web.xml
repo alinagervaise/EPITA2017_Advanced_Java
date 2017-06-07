@@ -30,6 +30,10 @@
         <servlet-name>DeleteIdentityServlet</servlet-name>
         <servlet-class>fr.epita.iam.servlets.DeleteIdentityServlet</servlet-class>
     </servlet>
+     <servlet>
+        <servlet-name>DisconnectServlet</servlet-name>
+        <servlet-class>fr.epita.iam.servlets.DisconnectServlet</servlet-class>
+    </servlet>
    <servlet-mapping>
       <servlet-name>AuthenticationServlet</servlet-name>
       <url-pattern>/authenticate</url-pattern>
@@ -52,5 +56,8 @@
       <servlet-name>DeleteIdentityServlet</servlet-name>
       <url-pattern>/delete</url-pattern>
    </servlet-mapping>
-	
+	<servlet-mapping>
+      <servlet-name>DisconnectServlet</servlet-name>
+      <url-pattern>/disconnect</url-pattern>
+   </servlet-mapping>
 </web-app>

@@ -28,7 +28,11 @@
         				<label class="error">${error_msg}</label>
             		</div>
             	</c:if>
-            	
+            	<c:if test="${logout_msg != null}">
+            		<div class="form-group">
+        				<label class="error">${logout_msg}</label>
+            		</div>
+            	</c:if>
             	
             	<button type="submit" class="btn btn-default">Login</button>
             	
