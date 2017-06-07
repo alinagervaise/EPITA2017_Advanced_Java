@@ -61,11 +61,9 @@ public class ModifyIdentityServlet extends BaseServlet{
 		HttpSession session = request.getSession();
 		String username =  (String)session.getAttribute("username");
 		String displayName =  (String)session.getAttribute("displayName");
-		String id = request.getParameter("id");
+		String id = (String)session.getAttribute("identity_id");
 		List<User> results = new ArrayList<User>();
-		User user = new User(username, "");
-	
-		    user = results.get(0);
+		
 		    System.out.println("Request params "+request.getParameterNames());
 		    String firstname = (String)request.getParameter("firstname");
 			String lastname = request.getParameter("lastname");
@@ -77,12 +75,18 @@ public class ModifyIdentityServlet extends BaseServlet{
 			String country = request.getParameter("country");
 			
 			Identity identity = new Identity("", firstname, email);
-			SimpleDateFormat sm = new SimpleDateFormat("dd/mm/yyyy");
+			SimpleDateFormat sm = new SimpleDateFormat("yyyy-mm-dd");
 			try {
-				identity.setBirthdate(sm.parse(birthdate));
+				if (birthdate == null || birthdate.isEmpty()){
+					identity.setBirthdate(null);
+				}
+				else{
+					identity.setBirthdate(sm.parse(birthdate));
+				}
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				identity.setBirthdate(null);
 			}
 			identity.setId(Long.parseLong(id));
 			identity.setFirstname(firstname);
@@ -95,19 +99,30 @@ public class ModifyIdentityServlet extends BaseServlet{
 				Identity result = identitiesFound.get(0);
 				if (!result.getAddresses().isEmpty()){
 					address = result.getAddresses().stream().findFirst().get();
+					address.setStreet(street);
+					address.setCity(city);
+					address.setZipCode(zipCode);
+					address.setCountry(country);
+					
+					address.setIdentity(identity);
+					addressDao.update(address);
+				}
+				else{
+					address.setStreet(street);
+					address.setCity(city);
+					address.setZipCode(zipCode);
+					address.setCountry(country);
+					addressDao.write(address);
+					address.setIdentity(identity);
+					addressDao.update(address);
 				}
 			  }catch(Exception ex){
 				  LOGGER.debug(ex.getMessage());
 			  }
-			address.setStreet(street);
-			address.setCity(city);
-			address.setZipCode(zipCode);
-			address.setCountry(country);
 			
-			addressDao.update(address);
 			
-			identity.setAddress(address);
-			identityDao.update(identity);
+			//identity.setAddress(address);
+			//identityDao.update(identity);
 		
 		    RequestDispatcher dispatcher = request.getRequestDispatcher("search-identity.jsp");
 		    dispatcher.include(request, response);
@@ -118,6 +133,8 @@ public class ModifyIdentityServlet extends BaseServlet{
 	  public void doGet(HttpServletRequest request, HttpServletResponse response)
 	               throws IOException, ServletException {
 		  String id = request.getParameter("id");
+		 HttpSession session = request.getSession();
+		 session.setAttribute("identity_id", id);
 		  Identity identity = new Identity();
 		  identity.setId(Long.parseLong(id));
 		  Address address = new Address();

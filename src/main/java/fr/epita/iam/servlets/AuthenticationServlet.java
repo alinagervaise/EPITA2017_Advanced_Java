@@ -76,6 +76,7 @@ public class AuthenticationServlet extends BaseServlet{
 		else {
 		    user = results.get(0);
 		    HttpSession session = request.getSession();
+		    session.setAttribute("current_user", user.getIdentity().getId());
 		    session.setAttribute("displayName", user.getIdentity().getDisplayName());
 		    session.setAttribute("username", username);
 		    LOGGER.info("Authentification success for user {}", username + " "+password);

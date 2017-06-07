@@ -54,12 +54,6 @@ public class Identity {
 	
 
 	@OneToMany(mappedBy = "identity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	/*
-	@JoinTable(name="identity_address",
-		joinColumns = @JoinColumn( name="identity_id"),
-	    inverseJoinColumns = @JoinColumn( name="address_id")
-	 )*/
-	
 	private Set<Address> addresses;
 	 /**
 	 * Default constructor

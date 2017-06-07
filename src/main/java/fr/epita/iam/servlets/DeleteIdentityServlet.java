@@ -31,8 +31,8 @@ import fr.epita.iam.services.DefaultDAO;
  *
  */
 
-@WebServlet(name="AuthenticationServlet", urlPatterns={"/create"})
-public class CreateIdentityServlet extends BaseServlet{
+@WebServlet(name="AuthenticationServlet", urlPatterns={"/delete"})
+public class DeleteIdentityServlet extends BaseServlet{
 
 	/**
 	 * 
@@ -53,7 +53,7 @@ public class CreateIdentityServlet extends BaseServlet{
 	DefaultDAO<User>userDao;
 	
 	
-	private static final Logger LOGGER = LogManager.getLogger(CreateIdentityServlet.class);
+	private static final Logger LOGGER = LogManager.getLogger(DeleteIdentityServlet.class);
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -61,24 +61,9 @@ public class CreateIdentityServlet extends BaseServlet{
 		HttpSession session = request.getSession();
 		String username =  (String)session.getAttribute("username");
 		String displayName =  (String)session.getAttribute("displayName");
-		
+		String id = (String)session.getAttribute("identity_id");
 		List<User> results = new ArrayList<User>();
-		User user = new User(username, "");
-		try {
-			results = (List<User>)userDao.search(user, "and", "username");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (results == null || results.isEmpty()){
-			String error_msg = "Could not find user when creating identity "+ username;
-			LOGGER.debug(error_msg);
-			response.setContentType("text/html");
-			//request.setAttribute("error_msg", error_msg);
-			//request.getRequestDispatcher("index.jsp").include(request, response);  
-		}
-		else {
-		    user = results.get(0);
+		
 		    System.out.println("Request params "+request.getParameterNames());
 		    String firstname = (String)request.getParameter("firstname");
 			String lastname = request.getParameter("lastname");
@@ -89,37 +74,86 @@ public class CreateIdentityServlet extends BaseServlet{
 			String city = request.getParameter("city");
 			String country = request.getParameter("country");
 			
-			Identity identity = new Identity("", displayName, email);
-			SimpleDateFormat sm = new SimpleDateFormat("dd/mm/yyyy");
+			Identity identity = new Identity("", firstname, email);
+			SimpleDateFormat sm = new SimpleDateFormat("yyyy-mm-dd");
 			try {
-				identity.setBirthdate(sm.parse(birthdate));
+				if (birthdate == null || birthdate.isEmpty()){
+					identity.setBirthdate(null);
+				}
+				else{
+					identity.setBirthdate(sm.parse(birthdate));
+				}
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				identity.setBirthdate(null);
 			}
+			identity.setId(Long.parseLong(id));
 			identity.setFirstname(firstname);
 			identity.setLastname(lastname);
-			identityDao.write(identity);
+			identityDao.update(identity);
 			
-			Address address = new Address(street, zipCode, city, country);
-			addressDao.write(address);
+			 Address address = new Address();
+			  try {
+				List<Identity> identitiesFound = identityDao.search(identity, "and", "id");
+				Identity result = identitiesFound.get(0);
+				if (!result.getAddresses().isEmpty()){
+					address = result.getAddresses().stream().findFirst().get();
+					address.setStreet(street);
+					address.setCity(city);
+					address.setZipCode(zipCode);
+					address.setCountry(country);
+					
+					address.setIdentity(identity);
+					addressDao.update(address);
+				}
+				else{
+					address.setStreet(street);
+					address.setCity(city);
+					address.setZipCode(zipCode);
+					address.setCountry(country);
+					addressDao.write(address);
+					address.setIdentity(identity);
+					addressDao.update(address);
+				}
+			  }catch(Exception ex){
+				  LOGGER.debug(ex.getMessage());
+			  }
 			
-			address.setIdentity(identity);
-			addressDao.update(address);
+			
 			//identity.setAddress(address);
 			//identityDao.update(identity);
 		
 		    RequestDispatcher dispatcher = request.getRequestDispatcher("search-identity.jsp");
 		    dispatcher.include(request, response);
-		}	
+			
 	}
 	
 	 @Override
 	  public void doGet(HttpServletRequest request, HttpServletResponse response)
 	               throws IOException, ServletException {
-	      // Set the response message's MIME type
+		 HttpSession session = request.getSession();
+		 String id = (String) request.getParameter("id");
+		 Long current_user_id = (long)session.getAttribute("current_user");
+		  Identity identity = new Identity();
+		  identity.setId(Long.parseLong(id));
+
+		  try {
+			List<Identity> results = identityDao.search(identity, "and", "id");
+			Identity result = results.get(0);
+			if (result.getId() == current_user_id){
+				String error_msg = "Sorry you cannot delete yourself";
+				LOGGER.debug(error_msg);
+				request.setAttribute("error_msg", error_msg);
+			}
+			identityDao.delete(result);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		  response.setContentType("text/html");
-		  request.getRequestDispatcher("create-identity.jsp").include(request, response);  
+		  request.getRequestDispatcher("search-identity.jsp").include(request, response);  
 	 }
 
 

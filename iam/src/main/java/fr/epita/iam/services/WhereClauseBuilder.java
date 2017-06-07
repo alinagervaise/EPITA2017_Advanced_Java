@@ -36,10 +36,7 @@ public class WhereClauseBuilder {
 			Field field = fields[i];
 			field.setAccessible(true);
 			String name = field.getName();
-			LOGGER.info(name);
 			Object fieldValue = field.get(obj);
-			LOGGER.info(fieldValue);
-			
 			String fieldWhereclause = name +" =  :" +name;
 			values.put(name, fieldValue);
 			queryString += " "+separator+ " "  + fieldWhereclause;
@@ -73,9 +70,7 @@ public class WhereClauseBuilder {
 				String name = field.getName();
 	
 				if (property.trim().equalsIgnoreCase(name)){
-					LOGGER.info(name);
 					Object fieldValue = field.get(obj);
-					LOGGER.info(fieldValue);
 					String fieldWhereclause = name +" =  :" +name;
 					if (values.isEmpty()){
 						queryString += " "  + fieldWhereclause;
@@ -117,10 +112,8 @@ public class WhereClauseBuilder {
 				String name = field.getName();
 	
 				if (property.trim().equalsIgnoreCase(name)){
-					LOGGER.info(name);
 					Object fieldValue = field.get(obj);
-					LOGGER.info(fieldValue);
-					String fieldWhereclause = name +" =  :" +name;
+					String fieldWhereclause = "LOWER("+ name+")  like LOWER( :" +name+") ";
 					if (values.isEmpty()){
 						queryString += " "  + fieldWhereclause;
 					}
@@ -128,8 +121,7 @@ public class WhereClauseBuilder {
 						queryString += " "+separator+ " "  + fieldWhereclause;
 					}
 					values.put(name, fieldValue);
-					
-					
+		
 				}
 			}
 		}
@@ -139,7 +131,6 @@ public class WhereClauseBuilder {
 		Query query = session.createQuery(queryString);
 		String[] namedParameters = query.getNamedParameters();
 		for (String parameter : namedParameters) {
-			LOGGER.info("------------------------------------------"+parameter);
 			query.setParameter(parameter, values.get(parameter));
 		}
 		return query;

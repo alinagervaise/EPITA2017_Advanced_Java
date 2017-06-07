@@ -66,8 +66,6 @@ public class SearchIdentityServlet extends BaseServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// get the user name from the current session
 		HttpSession session = request.getSession();
-		String username =  (String)session.getAttribute("username");
-		String displayName =  (String)session.getAttribute("displayName");
 		List<Identity>identities, resultIdentities;
 		List<Address> addresses , resultAddresses;
 		resultIdentities = new ArrayList<>();
@@ -78,7 +76,6 @@ public class SearchIdentityServlet extends BaseServlet{
 		boolean searchByAddress = IdentityService.searchByAddress(request);
 		
 	    if (!searchByIdentity && !searchByAddress){
-	    	System.out.println("POST-----1------------------------"+searchByIdentity + searchByAddress);
 			dispatcher.include(request, response);
 			return;
 	    }
@@ -87,20 +84,12 @@ public class SearchIdentityServlet extends BaseServlet{
 	    	for(Address address : addresses){
 	    		resultIdentities.add(address.getIdentity());
 	    	}
-	    	System.out.println("POST--------------2---------------"+searchByIdentity + searchByAddress+resultIdentities.size());
 	    	request.setAttribute("identities", resultIdentities);
-	    	for(Identity i : resultIdentities){
-	    		System.out.println("POST--------------2---------------"+i);
-	    	}
 	    	dispatcher.include(request, response);
 			return;
 	    }
 	    else if (searchByIdentity){
 	    	identities = IdentityService.findIdentity(request, identityDao);
-	    	System.out.println("POST--------------3---------------"+searchByIdentity + searchByAddress+identities.size());
-	    	for(Identity i : identities){
-	    		System.out.println("POST--------------3---------------"+i);
-	    	}
 	    	request.setAttribute("identities", identities);
 	    	dispatcher.include(request, response);
 			return;
@@ -115,7 +104,6 @@ public class SearchIdentityServlet extends BaseServlet{
 				}
 			}
 		}
-		System.out.println("POST--------------4---------------"+searchByIdentity + searchByAddress+resultIdentities.size());
 		request.setAttribute("identities", resultIdentities);
 		dispatcher.include(request, response);
 		
@@ -127,7 +115,6 @@ public class SearchIdentityServlet extends BaseServlet{
 	  public void doGet(HttpServletRequest request, HttpServletResponse response)
 	               throws IOException, ServletException {
 	      // Set the response message's MIME type
-		  System.out.println("GET-----------------------------");
 		  response.setContentType("text/html");
 		  request.getRequestDispatcher("search-identity.jsp").include(request, response);  
 	 }
