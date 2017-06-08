@@ -66,7 +66,7 @@ public class SearchIdentityServlet extends BaseServlet{
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// get the user name from the current session
 		HttpSession session = request.getSession();
-		System.out.println("-------------------------------"+request.getHeader("referer"));
+		//System.out.println("-------------------------------"+request.getHeader("referer"));
 		List<Identity>identities, resultIdentities;
 		List<Address> addresses , resultAddresses;
 		resultIdentities = new ArrayList<>();
@@ -100,6 +100,7 @@ public class SearchIdentityServlet extends BaseServlet{
 	    }
 	    else if (searchByIdentity){
 	    	identities = IdentityService.findIdentity(request, identityDao);
+	    	System.out.println("-------------------------------"+identities.size());
 	    	if (identities.isEmpty()){
 	    		error_msg = "Could not find result for your search";
 	    		LOGGER.debug(error_msg);

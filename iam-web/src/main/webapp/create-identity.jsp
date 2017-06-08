@@ -7,10 +7,10 @@
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
 	<!-- datepicker-->
 	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-	<!-- Include Date Range Picker
+	<!-- Include Date Range Picker-->
 	<script type="text/javascript" src="js/bootstrap-datepicker.min.js"></script>
 	<link rel="stylesheet" href="css/bootstrap-datepicker3.css"/>
-	 -->
+	 
 	<link rel="stylesheet" type="text/css" href="css/iam.css"/>
 	
 </head>
@@ -38,8 +38,13 @@
 						value="${email}" placeholder="Enter your email"/>
 					</div>
 					<div class="form-group">
-						<label>Birthday</label>
-						<input name="birthdate" class="form-control" type="date" />
+						<label>Birthdate</label>
+							<div class="input-group date" data-provide="datepicker">
+								<input type="text" class="form-control" name="birthdate" id="birthdate" placeholder="dd/mm/yyyy">
+								<div class="input-group-addon">
+								 <span class="glyphicon glyphicon-calendar"></span>
+							 	</div>
+							</div>
 					</div>
 				</div>
 				<div class="col-xs-6">
@@ -77,4 +82,14 @@
     </div>
 
 </body>
+<script>
+	$(document).ready(function(){
+		$('#birthdate input').datepicker({
+			format: 'dd/mm/yyyy',
+			orientation: "bottom right",
+			todayHighlight: true,
+			autoclose: true,
+		});
+ });
+</script>
 

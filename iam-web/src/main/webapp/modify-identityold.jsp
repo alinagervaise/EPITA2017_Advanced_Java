@@ -24,23 +24,23 @@
 					<div class="form-group">
 						<label>First Name</label>
 						<input name="firstname" class="form-control" id="firstname" type="text"
-						  value=" <c:out value="${firstname}" />"/>
+						  value=" <c:out value="${identity.firstname}" />"/>
 					</div>
 					<div class="form-group">
 						<label>Last name</label>
 						<input name="lastname" class="form-control" type="text"
-						 value=" <c:out value="${lastname}" />" />
+						 value=" <c:out value="${identity.lastname}" />" />
 					</div>
 					<div class="form-group">
 						<label>Email</label>
 						<input name="email" class="form-control" id="email" type="text" 
-						 value=" <c:out value="${email}" />"/>
+						 value=" <c:out value="${identity.email}" />"/>
 					</div>
 					<div class="form-group">
 					<label>Birthdate</label>
 							<div class="input-group date" data-provide="datepicker">
 								<input type="text" class="form-control" name="birthdate" id="birthdate" 
-								value=" <c:out value="${birthdate}" />"
+								value=" <c:out value="${identity.birthdate}" />"
 								placeholder="dd/mm/yyyy">
 								<div class="input-group-addon">
 								 <span class="glyphicon glyphicon-calendar"></span>
@@ -59,22 +59,22 @@
 					<div class="form-group">
 						<label>Street</label>
 						<input name="street" class="form-control" id="street" type="text" 
-						 value=" <c:out value="${street}" />"/>
+						 value=" <c:out value="${address.street}" />"/>
 					</div>
 					<div class="form-group">
 						<label>Zip Code</label>
 						<input name="zipcode" class="form-control" type="text" 
-						value=" <c:out value="${zipcode}" />" />
+						value=" <c:out value="${address.zipCode}" />" />
 					</div>
 					<div class="form-group">
 						<label>City</label>
 						<input name="city" class="form-control" id="city" type="text"
-						  value=" <c:out value="${city}" />"/>
+						  value=" <c:out value="${address.city}" />"/>
 					</div>
 					<div class="form-group">
 						<label>Country</label>
 						<input name="country" class="form-control" type="text" 
-						value="<c:out value="${country}" />" />
+						value="<c:out value="${address.country}" />" />
 					</div>
 				</div>
 				<c:if test="${error_msg != null}">

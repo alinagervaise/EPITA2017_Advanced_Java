@@ -24,6 +24,7 @@ import fr.epita.iam.datamodel.Address;
 import fr.epita.iam.datamodel.Identity;
 import fr.epita.iam.datamodel.User;
 import fr.epita.iam.services.DefaultDAO;
+import fr.iam.iam.services.business.IdentityService;
 
 
 /**
@@ -92,8 +93,14 @@ public class CreateIdentityServlet extends BaseServlet{
 			Identity identity = new Identity("", displayName, email);
 			SimpleDateFormat sm = new SimpleDateFormat("dd/mm/yyyy");
 			try {
-				identity.setBirthdate(sm.parse(birthdate));
+				if (birthdate == null || birthdate.isEmpty()){
+					identity.setBirthdate(null);
+				}
+				else{
+					identity.setBirthdate(sm.parse(birthdate));
+				}
 			} catch (ParseException e) {
+				identity.setBirthdate(null);
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -101,13 +108,15 @@ public class CreateIdentityServlet extends BaseServlet{
 			identity.setLastname(lastname);
 			identityDao.write(identity);
 			
+			if ( IdentityService.searchByAddress(request)){
 			Address address = new Address(street, zipCode, city, country);
 			addressDao.write(address);
 			
 			address.setIdentity(identity);
 			addressDao.update(address);
 			//identity.setAddress(address);
-			//identityDao.update(identity);
+			identityDao.update(identity);
+			}
 		
 		    RequestDispatcher dispatcher = request.getRequestDispatcher("search-identity.jsp");
 		    dispatcher.include(request, response);

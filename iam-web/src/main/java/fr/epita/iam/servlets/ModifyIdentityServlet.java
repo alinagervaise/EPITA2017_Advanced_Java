@@ -74,13 +74,19 @@ public class ModifyIdentityServlet extends BaseServlet{
 			String city = request.getParameter("city");
 			String country = request.getParameter("country");
 			
-			Identity identity = new Identity("", firstname, email);
+			
 			SimpleDateFormat sm = new SimpleDateFormat("dd/mm/yyyy");
+			Identity identity = new Identity();
+			identity.setId(Long.parseLong(id));
 			try {
-				if (birthdate == null || birthdate.isEmpty()){
+				List<Identity> result = (List<Identity>)identityDao.search(identity, "and", "id");
+		        identity = result.get(0);
+			try {
+				if (birthdate == null || birthdate.trim().isEmpty()){
 					identity.setBirthdate(null);
 				}
 				else{
+					
 					identity.setBirthdate(sm.parse(birthdate));
 				}
 			} catch (ParseException e) {
@@ -88,17 +94,21 @@ public class ModifyIdentityServlet extends BaseServlet{
 				e.printStackTrace();
 				identity.setBirthdate(null);
 			}
-			identity.setId(Long.parseLong(id));
 			identity.setFirstname(firstname);
 			identity.setLastname(lastname);
+			identity.setEmail(email);
 			identityDao.update(identity);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			 Address address = new Address();
 			  try {
 				List<Identity> identitiesFound = identityDao.search(identity, "and", "id");
-				Identity result = identitiesFound.get(0);
-				if (!result.getAddresses().isEmpty()){
-					address = result.getAddresses().stream().findFirst().get();
+				identity= identitiesFound.get(0);
+				if (!identity.getAddresses().isEmpty()){
+					address = identity.getAddresses().stream().findFirst().get();
 					address.setStreet(street);
 					address.setCity(city);
 					address.setZipCode(zipCode);
@@ -116,13 +126,14 @@ public class ModifyIdentityServlet extends BaseServlet{
 					address.setIdentity(identity);
 					addressDao.update(address);
 				}
+				identityDao.update(identity);
 			  }catch(Exception ex){
 				  LOGGER.debug(ex.getMessage());
 			  }
 			
 			
 			//identity.setAddress(address);
-			//identityDao.update(identity);
+			identityDao.update(identity);
 		
 		    RequestDispatcher dispatcher = request.getRequestDispatcher("search-identity.jsp");
 		    dispatcher.include(request, response);
@@ -140,14 +151,30 @@ public class ModifyIdentityServlet extends BaseServlet{
 		  Address address = new Address();
 		  try {
 			List<Identity> results = identityDao.search(identity, "and", "id");
+			if (results == null || results.isEmpty()){
+				request.setAttribute("error_msg", "Nothing to modify.Please select element to edit.");
+				request.getRequestDispatcher("modify-identity.jsp").include(request, response); 
+				return;
+			}
 			Identity result = results.get(0);
 			if (!result.getAddresses().isEmpty()){
 				address = result.getAddresses().stream().findFirst().get();
 			}
-			//SimpleDateFormat sm = new SimpleDateFormat("dd/mm/yyyy");
 			
+			//SimpleDateFormat sm = new SimpleDateFormat("dd/mm/yyyy");
+			/*
 			request.setAttribute("identity", result);
 			request.setAttribute("address", address);
+			*/
+			request.setAttribute("firstname", result.getFirstname());
+			request.setAttribute("lastname", result.getLastname());
+			request.setAttribute("email", result.getEmail());
+			request.setAttribute("birthdate", result.getBirthdate());
+			
+			request.setAttribute("street", address.getStreet());
+			request.setAttribute("zipcode", address.getZipCode());
+			request.setAttribute("city", address.getCity());
+			request.setAttribute("country", address.getCountry());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

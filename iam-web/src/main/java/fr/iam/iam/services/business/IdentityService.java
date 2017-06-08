@@ -97,6 +97,10 @@ public  class IdentityService {
 		}
 		
 		try {
+			for (String a: args){
+			System.out.println("SEARCH--------------"+a);
+			}
+			System.out.println("SEARCH--------------"+identity);
 			identities =  identityDao.search(identity,  "and", args);
 		} catch (IllegalArgumentException e1) {
 			// TODO Auto-generated catch block

@@ -7,6 +7,10 @@
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
 	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/iam.css"/>
+	<!-- Include Date Range Picker-->
+	<script type="text/javascript" src="js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet" href="css/bootstrap-datepicker3.css"/>
+	 
 </head>
 
 <body>
@@ -36,11 +40,22 @@
 						</div>
 					</div>
 					<div class="col-sm-3">
+					<div class="form-group">
+						<label>Birthdate</label>
+							<div class="input-group date" data-provide="datepicker">
+								<input type="text" class="form-control" name="birthdate" id="birthdate" placeholder="dd/mm/yyyy">
+								<div class="input-group-addon">
+								 <span class="glyphicon glyphicon-calendar"></span>
+							 	</div>
+							</div>
+					</div>
+					<!--  
 						<div class="form-group">
 							<label>Birthdate</label>
 							<input name="birthdate" class="form-control" type="date"
 						 value=" <c:out value="${identity.birthdate}" />" />
 						</div>
+						-->
 					</div>
 				</div>
 				<!-- search by address-->

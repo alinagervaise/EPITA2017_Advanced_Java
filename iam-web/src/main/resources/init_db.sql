@@ -1,12 +1,19 @@
 -- Deleting all tables
--- DROP TABLE identity_address;
--- DROP TABLE address;
--- DROP TABLE identities;
--- DROP TABLE role_permission;
--- DROP TABLE permission;
--- DROP TABLE users;
--- DROP TABLE role;
+--DROP TABLE role_permission;
+--DROP TABLE permission;
+--DROP TABLE identity_address;
+--DROP TABLE users;
+--DROP TABLE role;
+--DROP TABLE address;
+--DROP TABLE identities;
 
+
+
+
+-- DROP TABLE users;
+
+
+--ALTER TABLE identities  ALTER birthdate SET DATA TYPE DATE;
 -- add admin users
 INSERT INTO  identities (firstname, lastname, email) VALUES ('Gervaise', 'ALINA','gervaisita@gmail.com');
 
