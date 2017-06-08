@@ -110,10 +110,17 @@ public class WhereClauseBuilder {
 				Field field = fields[i];
 				field.setAccessible(true);
 				String name = field.getName();
-	
 				if (property.trim().equalsIgnoreCase(name)){
 					Object fieldValue = field.get(obj);
-					String fieldWhereclause = "LOWER("+ name+")  like LOWER( :" +name+") ";
+					String fieldWhereclause;
+					if (field.get(obj) != null  && field.get(obj).getClass().equals(String.class)){
+						fieldWhereclause =  "Lower("+name+") = Lower(:" +name+")";
+						
+					}
+					else{
+						System.out.println("WHERE-------------------------"+field.get(obj)+field.get(obj).getClass());
+						fieldWhereclause =  name+" = :" +name;
+					}
 					if (values.isEmpty()){
 						queryString += " "  + fieldWhereclause;
 					}
@@ -131,6 +138,7 @@ public class WhereClauseBuilder {
 		Query query = session.createQuery(queryString);
 		String[] namedParameters = query.getNamedParameters();
 		for (String parameter : namedParameters) {
+			
 			query.setParameter(parameter, values.get(parameter));
 		}
 		return query;

@@ -18,6 +18,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.JoinColumn;
 
 /**
@@ -47,13 +53,22 @@ public class Identity {
 	private String lastname;
 	
 	@Column(name="BIRTHDATE")
+	@Temporal(TemporalType.DATE)
 	private Date birthdate;
 	
 	@Column(name="EMAIL")
 	private String email;
 	
 
-	@OneToMany(mappedBy = "identity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	//@OneToMany(mappedBy = "identity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="identity", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+
+	/*@JoinTable(
+			name="identity_address", 
+	        joinColumns = @JoinColumn(name = "IDENTITY_ID"),
+	        inverseJoinColumns = @JoinColumn(name = "ADDRESS_ID")
+	)*/
 	private Set<Address> addresses;
 	 /**
 	 * Default constructor

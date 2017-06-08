@@ -1,16 +1,23 @@
 package fr.epita.iam.datamodel;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name="Address")
@@ -33,8 +40,12 @@ public class Address {
 	@Column(name="COUNTRY")
 	private String country;
 	
-	@ManyToOne//(cascade=CascadeType.DETACH)
+	//@ManyToOne(cascade=CascadeType.ALL)//,  fetch = FetchType.EAGER)
+	//@JoinColumn(name = "IDENTITY_ID")
+	
+	@ManyToOne
 	@JoinColumn(name = "IDENTITY_ID")
+
 	private Identity identity;
 	
 	public Address(){
@@ -94,7 +105,20 @@ public class Address {
 	public void setIdentity(Identity identity) {
 		this.identity = identity;
 	}
+	/*
+	public void setIdentities(Identity identity) {
+		if (identities == null){
+			identities = new HashSet<Identity>();
+		}
+        identities.add(identity);
+	}
 	
+	public Set<Identity> getIdentities() {
+		return identities;
+	}
+	public void setIdentities(Set<Identity> identities) {
+		this.identities = identities;
+	}*/
 	@Override
 	public int hashCode() {
 		final int prime = 31;
